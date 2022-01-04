@@ -7,7 +7,6 @@ import (
   "os/signal"
   "runtime"
   "syscall"
-  "time"
 
   "hogo/core/components"
 
@@ -29,21 +28,6 @@ func CreateServiceBus(serviceBusAddress string) *components.ServiceBus {
   return serviceBus
 }
 
-func SetupCloseHandler() {
-  c := make(chan os.Signal, 2)
-  signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-  go func() {
-    <-c
-    fmt.Println("\rGot Interrupt Signal")
-
-    time.Sleep(time.Second)
-    defer components.GetServiceBus().Close()
-    defer components.GetServiceBus().Drain()
-
-    os.Exit(0)
-  }()
-}
-
 func Wait(gracefulShutdownOnExit bool) {
   log.Println("Press Control-C to stop")
 
@@ -60,17 +44,10 @@ func Wait(gracefulShutdownOnExit bool) {
 
         fmt.Println("\rClosing connection to Service Bus")
         components.GetServiceBus().Close()
-
-        defer func() {
-          for {
-            time.Sleep(time.Millisecond * 100)
-            if !components.GetServiceBus().Connected() {
-              os.Exit(0)
-            }
-          }
-        }()
       }
     }
+
+    os.Exit(0)
   }()
 
   runtime.Goexit()
