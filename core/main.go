@@ -55,20 +55,19 @@ func Wait(gracefulShutdownOnExit bool) {
 
     if gracefulShutdownOnExit {
       if components.GetServiceBus().Connected() {
+        fmt.Println("\rDraining connection to Service Bus")
+        components.GetServiceBus().Drain()
+
+        fmt.Println("\rClosing connection to Service Bus")
+        components.GetServiceBus().Close()
+
         defer func() {
           for {
-            time.Sleep(time.Millisecond * 300)
+            time.Sleep(time.Millisecond * 100)
             if !components.GetServiceBus().Connected() {
               os.Exit(0)
             }
           }
-        }()
-
-        defer func() {
-          fmt.Println("\rDraining connection to Service Bus")
-          components.GetServiceBus().Drain()
-          fmt.Println("\rClosing connection to Service Bus")
-          components.GetServiceBus().Close()
         }()
       }
     }
