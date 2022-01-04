@@ -64,9 +64,12 @@ func Wait(gracefulShutdownOnExit bool) {
           }
         }()
 
-        fmt.Println("\rGracefully closing connection to Service Bus")
-        defer components.GetServiceBus().Close()
-        defer components.GetServiceBus().Drain()
+        defer func() {
+          fmt.Println("\rDraining connection to Service Bus")
+          components.GetServiceBus().Drain()
+          fmt.Println("\rClosing connection to Service Bus")
+          components.GetServiceBus().Close()
+        }()
       }
     }
   }()
