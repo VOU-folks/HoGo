@@ -11,7 +11,7 @@ func main() {
 
   instance := api.CreateInstance()
   go api.BindAppToSocket(instance.App, helpers.GetSocketAddr())
-  api.Start(instance.App)
+  api.Start(instance)
 
   core.Wait(true)
 }

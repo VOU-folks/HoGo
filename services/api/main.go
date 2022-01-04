@@ -35,6 +35,6 @@ func BindAppToSocket(app *components.Engine, socketAddr helpers.SocketAddr) {
   }
 }
 
-func Start(app *components.Engine) {
-  router.Attach(app)
+func Start(instance *components.DI) {
+  router.Attach(instance.App)
 }
