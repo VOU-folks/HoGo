@@ -30,15 +30,13 @@ func CreateServiceBus(serviceBusAddress string) *components.ServiceBus {
 
 func Shutdown(graceful bool) {
   if graceful {
-    if !components.GetServiceBus().Connected() {
-      return
+    if components.GetServiceBus().Connected() {
+      fmt.Println("\rDraining connection to Service Bus")
+      components.GetServiceBus().Drain()
+
+      fmt.Println("\rClosing connection to Service Bus")
+      components.GetServiceBus().Close()
     }
-
-    fmt.Println("\rDraining connection to Service Bus")
-    components.GetServiceBus().Drain()
-
-    fmt.Println("\rClosing connection to Service Bus")
-    components.GetServiceBus().Close()
   }
   os.Exit(0)
 }
