@@ -1,15 +1,15 @@
 package main
 
 import (
-  "hogo/core"
-  "hogo/services/auth"
+	"hogo/core"
+	"hogo/services/auth"
 )
 
 func main() {
-  core.LoadEnv()
+	core.LoadEnv()
 
-  instance := auth.CreateInstance()
-  auth.Start(instance)
+	instance := auth.CreateInstance()
+	auth.Start(instance)
 
-  core.Wait(true)
+	core.Wait(true)
 }

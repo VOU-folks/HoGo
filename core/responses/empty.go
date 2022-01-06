@@ -1,17 +1,17 @@
 package responses
 
 import (
-  "net/http"
+	"net/http"
 
-  "hogo/core/components"
+	"hogo/core/components"
 )
 
 type Empty struct{}
 
 func RespondWithEmpty(c *components.Context) {
-  c.Status(http.StatusNoContent)
+	c.Status(http.StatusNoContent)
 }
 
 func HandleEmpty(c *components.Context) {
-  RespondWithEmpty(c)
+	RespondWithEmpty(c)
 }

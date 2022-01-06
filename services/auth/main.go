@@ -1,25 +1,26 @@
 package auth
 
 import (
-  "fmt"
-  "os"
+	"fmt"
+	"os"
 
-  "github.com/nats-io/nats.go"
-  "hogo/core"
-  "hogo/core/components"
+	"github.com/nats-io/nats.go"
+
+	"hogo/core"
+	"hogo/core/components"
 )
 
 func CreateInstance() *components.DI {
-  di := components.GetDI()
+	di := components.GetDI()
 
-  serviceBus := core.CreateServiceBus(os.Getenv("NATS_URL"))
-  di.ServiceBus = serviceBus
+	serviceBus := core.CreateServiceBus(os.Getenv("NATS_URL"))
+	di.ServiceBus = serviceBus
 
-  return di
+	return di
 }
 
 func Start(instance *components.DI) {
-  instance.ServiceBus.Subscribe("auth.attempt", func(msg *nats.Msg) {
-    fmt.Println(msg)
-  })
+	instance.ServiceBus.Subscribe("auth.attempt", func(msg *nats.Msg) {
+		fmt.Println(msg)
+	})
 }

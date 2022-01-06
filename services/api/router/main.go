@@ -1,9 +1,11 @@
 package router
 
-import "hogo/core/components"
+import (
+	"hogo/core/components"
+)
 
 func Attach(app *components.Engine) {
-  AttachInfoRoutes(app)
-  AttachSwaggerRoutes(app)
-  AttachNotFound(app)
+	AttachInfoRoutes(app)
+	AttachSwaggerRoutes(app)
+	AttachNotFound(app)
 }
