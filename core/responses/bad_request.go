@@ -31,7 +31,7 @@ func RespondWithBadRequest(c *components.Context) {
 		NewBadRequest())
 }
 
-func RespondWithMessageInBadRequest(message string, c *components.Context) {
+func RespondWithMessageInBadRequest(c *components.Context, message string) {
 	c.AbortWithStatusJSON(
 		http.StatusBadRequest,
 		NewBadRequestWithMessage(message))

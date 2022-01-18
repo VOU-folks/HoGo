@@ -6,6 +6,6 @@ import (
 	"hogo/core/components"
 )
 
-func OK(data interface{}, c *components.Context) {
+func OK(c *components.Context, data interface{}) {
 	c.JSON(http.StatusOK, data)
 }

@@ -21,14 +21,14 @@ func NewSystemError(err error) SystemError {
 	}
 }
 
-func HandleSystemError(err error, c *components.Context) {
+func HandleSystemError(c *components.Context, err error) {
 	c.AbortWithStatusJSON(
 		http.StatusInternalServerError,
 		NewSystemError(err))
 }
 
-func RespondWithSystemError(err error, c *components.Context) {
-	HandleSystemError(err, c)
+func RespondWithSystemError(c *components.Context, err error) {
+	HandleSystemError(c, err)
 }
 
 func RecoverOnSystemError(c *components.Context) {
@@ -44,7 +44,7 @@ func RecoverOnSystemError(c *components.Context) {
 				err = errors.New("Unknown error")
 			}
 			fmt.Println(err)
-			RespondWithSystemError(err, c)
+			RespondWithSystemError(c, err)
 		}
 	}(c)
 	c.Next()

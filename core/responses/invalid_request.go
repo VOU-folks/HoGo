@@ -27,7 +27,7 @@ func NewInvalidRequest(invalidFields []InvalidField) InvalidRequest {
 	}
 }
 
-func RespondWithInvalidRequest(err error, c *components.Context) {
+func RespondWithInvalidRequest(c *components.Context, err error) {
 	switch err.(type) {
 	case *validator.ValidationErrors:
 		var invalidFields []InvalidField
@@ -45,6 +45,6 @@ func RespondWithInvalidRequest(err error, c *components.Context) {
 			NewInvalidRequest(invalidFields))
 
 	default:
-		RespondWithMessageInBadRequest(err.Error(), c)
+		RespondWithMessageInBadRequest(c, err.Error())
 	}
 }
