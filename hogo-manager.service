@@ -1,0 +1,30 @@
+[Unit]
+Description=HoGo Manager Service
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+EnvironmentFile=/etc/hogo/hogo.conf
+ExecStart=/etc/hogo/bin/hogo --listen=0.0.0.0:80 --proxy-to=127.0.0.1:8008 --metrics=false --silent=true
+ExecStop=/bin/kill -s TERM $MAINPID
+WorkingDirectory=/etc/hogo
+User=root
+Group=root
+Restart=always
+RestartSec=5
+StandardOutput=append:/etc/hogo/log/hogo-manager.log
+StandardError=append:/etc/hogo/log/hogo-manager.log
+SyslogIdentifier=%n
+
+TimeoutStopSec=0
+Restart=always
+User=root
+Group=root
+RuntimeDirectory=/etc/hogo
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
