@@ -7,7 +7,7 @@ WantedBy=multi-user.target
 
 [Service]
 EnvironmentFile=/etc/hogo/hogo.conf
-ExecStart=/etc/hogo/bin/hogo --listen=0.0.0.0:80 --proxy-to=127.0.0.1:8008 --metrics=false --silent=true
+ExecStart=/etc/hogo/bin/hogo --listen=0.0.0.0:${MANAGER_API_PORT} --metrics=${METRICS_ENABLED} --silent=${SILENT_MODE} --dev=${DEV_MODE}
 ExecStop=/bin/kill -s TERM $MAINPID
 WorkingDirectory=/etc/hogo
 User=root

@@ -23,7 +23,7 @@ cp .env.example .env
 ---
 
 #### hogo.conf:
-This file is for service specific non sensitive configs (like flags, addresses and etc).
+This file is for service specific non-sensitive configs (like flags, addresses and etc).
 
 After building and copying to `/etc/hogo/hogo.conf` check for necessary parameters before starting as systemd service.
 
@@ -35,12 +35,11 @@ After building and copying to `/etc/hogo/hogo.conf` check for necessary paramete
 ```
 
 ```shell
-mkdir -p /etc/hogo/bin
-mkdir -p /etc/hogo/files
-mkdir -p /etc/hogo/log
-rm /etc/hogo/log/*
-go build -o /etc/hogo/bin/hogo-manager main.go
-chmod +x /etc/hogo/bin/hogo-manager
+mkdir -p /etc/hogo/
+mkdir -p /var/log/hogo
+rm /var/log/hogo/*
+go build -o /etc/hogo/hogo-manager main.go
+chmod +x /etc/hogo/hogo-manager
 cp hogo.conf /etc/hogo/hogo.conf
 cp .env /etc/hogo/.env
 

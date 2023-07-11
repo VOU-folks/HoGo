@@ -1,9 +1,16 @@
-package hogo_manager
+package main
 
 import (
-	"log"
+	. "hogo/apps/hogo-manager/lib"
+	"hogo/lib/core/helpers"
+	"hogo/lib/core/log"
 )
 
 func main() {
-	log.Println("Not implemented")
+	args := helpers.GetArgs()
+	log.Init(log.Level(args.Verbosity), log.Formatter(args.LogFormat))
+
+	server := &HogoManagerServer{}
+	server.Init(args)
+	server.Listen()
 }

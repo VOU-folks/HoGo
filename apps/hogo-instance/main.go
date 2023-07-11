@@ -1,4 +1,4 @@
-package hogo_db
+package hogo_instance
 
 import (
 	"log"
