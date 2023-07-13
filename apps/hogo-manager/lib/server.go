@@ -1,82 +1,76 @@
 package lib
 
 import (
+	"context"
+	"errors"
+	"hogo/apps/hogo-manager/lib/counters"
 	. "hogo/lib/core/helpers"
 	. "hogo/lib/core/http"
+	"hogo/lib/core/http/handlers"
+	"hogo/lib/core/interfaces"
 	"hogo/lib/core/log"
-	"os"
-	"os/signal"
+	"net/http"
 	"runtime"
-	"syscall"
 	"time"
 )
 
 type HogoManagerServer struct {
-	HTTPServer
 	stopped       bool
 	stopRequested bool
+
+	app        interfaces.App
+	httpServer *http.Server
 }
 
 func (s *HogoManagerServer) Init(args Args) {
 	s.stopped = false
 	s.stopRequested = false
 
-	s.HTTPServer.Init(args)
-
-	// ToDo: Setup necessary preparations before Listen() call
+	s.httpServer = CreateHttpServer(args.ListenAt)
+	s.app = &HogoManagerApp{}
+	s.app.Init(args)
+	s.app.BindToHttpServer(s.httpServer)
 }
 
 func (s *HogoManagerServer) Listen() {
-	s.HTTPServer.Listen()
+	if s.stopRequested {
+		log.Error("HogoManagerServer.Listen:", errors.New("stop requested before listen call"))
+	}
 
-	s.HandleInterruption()
+	err := s.httpServer.ListenAndServe()
+	if err != nil {
+		if !errors.Is(err, http.ErrServerClosed) {
+			log.Fatal("httpServer.ListenAndServe:", err.Error())
+		}
+	}
 }
 
-func (s *HogoManagerServer) HandleInterruption() {
-	log.Println("Press Control-C to stop")
+func (s *HogoManagerServer) Stop() {
+	if s.stopRequested {
+		return
+	}
+	s.stopRequested = true
 
-	c := make(chan os.Signal, 2)
-	signal.Notify(
-		c,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGKILL,
-		syscall.SIGUSR1,
-		syscall.SIGUSR2,
-	)
-
-	sig := <-c
-	log.Warn("Got ", sig, " signal")
-
-	go s.Shutdown()
-
-	s.ShutdownHandler()
-}
-
-func (s *HogoManagerServer) ShutdownHandler() {
 	for {
-		if s.IsStopped() {
+		if counters.ActiveRequests.Value() == 0 {
 			break
 		}
 
 		time.Sleep(time.Microsecond * 100)
 	}
 
-	log.Println("Bye (:")
+	s.httpServer.Handler = &handlers.ShutdownHandler{}
+	time.Sleep(time.Second * 5)
+	err := s.httpServer.Shutdown(context.Background())
+	if err != nil {
+		log.Fatal("httpServer.Close:", err.Error())
+	}
 
-	os.Exit(0)
-}
-
-func (s *HogoManagerServer) Shutdown() {
-	s.stopRequested = true
-
-	// ToDo: Graceful shutdown logic
-	/*
-		Expected to have code of closing db connections, tasks and etc
-	*/
-	time.Sleep(time.Second)
-
-	s.HTTPServer.Stop()
+	s.stopped = true
 
 	runtime.Goexit()
+}
+
+func (s *HogoManagerServer) IsStopped() bool {
+	return s.stopped
 }

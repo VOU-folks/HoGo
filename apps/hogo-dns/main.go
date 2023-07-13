@@ -15,6 +15,7 @@ var dnsServer *dns.Server
 var apiServer *api.Server
 
 func main() {
+	panic("NOT READY FOR USE")
 
 	dnsServer = dns.CreateServer()
 	dnsServer.SetHandler(dns.Handler{})
@@ -53,7 +54,7 @@ func WaitForCloseSignal(gracefulShutdownOnExit bool) {
 func Shutdown() {
 	dnsServer.Close()
 	apiServer.Close()
-	
+
 	log.Println("Bye (:")
 
 	os.Exit(0)

@@ -8,7 +8,7 @@ import (
 var GlobalArgs Args
 
 type Args struct {
-	Port           string
+	ListenAt       string
 	MetricsEnabled bool
 	SilentMode     bool
 	DevMode        bool
@@ -42,6 +42,7 @@ func GetArgs() Args {
 	log.Println("log-format =", *logFormat)
 
 	GlobalArgs = Args{
+		ListenAt:       *listen,
 		MetricsEnabled: *metricsEnabled,
 		SilentMode:     *silentMode,
 		DevMode:        *devMode,

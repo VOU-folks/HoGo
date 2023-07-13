@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"hogo/apps/hogo-dns/lib/http"
-	"hogo/apps/hogo-dns/lib/http/methods"
-	"hogo/apps/hogo-dns/lib/metrics"
+	"hogo/lib/core/http"
+	"hogo/lib/core/http/handlers"
+	"hogo/lib/core/metrics"
 )
 
 type Server struct {
@@ -55,7 +55,7 @@ func createApiInstance(withMetrics bool, silentMode bool) *gin.Engine {
 		monitor.Use(app)
 	}
 
-	app.NoMethod(methods.NotFound)
+	app.NoMethod(handlers.NotFound)
 
 	return app
 }
