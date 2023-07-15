@@ -10,5 +10,7 @@ func Attach(r *gin.Engine) {
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, globals.AppInfo)
 	})
-	AttachAuth(r.Group("/auth"))
+
+	AuthRouting(r.Group("/auth"))
+	AccountRouting(r.Group("/account"))
 }
