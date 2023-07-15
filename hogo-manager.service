@@ -14,8 +14,8 @@ User=root
 Group=root
 Restart=always
 RestartSec=5
-StandardOutput=append:/etc/hogo/log/hogo-manager.log
-StandardError=append:/etc/hogo/log/hogo-manager.log
+StandardOutput=append:/var/log/hogo/hogo-manager.log
+StandardError=append:/var/log/hogo/hogo-manager.log
 SyslogIdentifier=%n
 
 TimeoutStopSec=0
