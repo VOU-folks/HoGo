@@ -34,19 +34,6 @@ func GetArgs() Args {
 		*verbosity = log.DebugLevel
 	}
 
-	t := table.NewWriter()
-	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Arg", "Value"})
-	t.AppendRows([]table.Row{
-		[]interface{}{"listen", *listen},
-		[]interface{}{"metrics", *metricsEnabled},
-		[]interface{}{"silent", *silentMode},
-		[]interface{}{"dev", *devMode},
-		[]interface{}{"verbosity", *verbosity},
-		[]interface{}{"log-format", *logFormat},
-	})
-	t.Render()
-
 	return Args{
 		ListenAt:       *listen,
 		MetricsEnabled: *metricsEnabled,
@@ -55,4 +42,19 @@ func GetArgs() Args {
 		Verbosity:      *verbosity,
 		LogFormat:      *logFormat,
 	}
+}
+
+func PrintArgs(args Args) {
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"Arg", "Value"})
+	t.AppendRows([]table.Row{
+		[]interface{}{"listen", args.ListenAt},
+		[]interface{}{"metrics", args.MetricsEnabled},
+		[]interface{}{"silent", args.SilentMode},
+		[]interface{}{"dev", args.DevMode},
+		[]interface{}{"verbosity", args.Verbosity},
+		[]interface{}{"log-format", args.LogFormat},
+	})
+	t.Render()
 }

@@ -79,4 +79,5 @@ func InitGlobals() {
 	helpers.PrintAppInfo(AppInfo)
 
 	Args = helpers.GetArgs()
+	helpers.PrintArgs(Args)
 }
