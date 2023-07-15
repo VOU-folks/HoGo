@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	. "hogo/apps/hogo-manager/lib"
 	"hogo/lib/core/helpers"
 	"hogo/lib/core/interfaces"
@@ -12,14 +13,14 @@ import (
 )
 
 var server interfaces.Server
-var args helpers.Args
 
 func init() {
-	args = helpers.GetArgs()
-	log.Init(log.Level(args.Verbosity), log.Formatter(args.LogFormat))
+	InitGlobals()
+
+	log.Init(log.Level(Args.Verbosity), log.Formatter(Args.LogFormat))
 
 	server = &HogoManagerServer{}
-	server.Init(args)
+	server.Init(Args)
 }
 
 func main() {
@@ -61,4 +62,21 @@ func WaitForShutdown() {
 	log.Println("Bye (:")
 
 	os.Exit(0)
+}
+
+/************/
+/* GLOBALS */
+/***********/
+
+var AppInfo helpers.AppInfo
+var Args helpers.Args
+
+//go:embed app-info.json
+var embeddedFiles embed.FS
+
+func InitGlobals() {
+	AppInfo = helpers.GetAppInfo(embeddedFiles)
+	helpers.PrintAppInfo(AppInfo)
+
+	Args = helpers.GetArgs()
 }

@@ -60,7 +60,6 @@ func (s *HogoManagerServer) Stop() {
 	}
 
 	s.httpServer.Handler = &handlers.ShutdownHandler{}
-	time.Sleep(time.Second * 5)
 	err := s.httpServer.Shutdown(context.Background())
 	if err != nil {
 		log.Fatal("httpServer.Close:", err.Error())

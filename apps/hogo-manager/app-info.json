@@ -1,0 +1,5 @@
+{
+  "type": "service",
+  "name": "hogo-manager",
+  "version": "1.0.0"
+}

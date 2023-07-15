@@ -2,6 +2,7 @@ package lib
 
 import (
 	"github.com/gin-gonic/gin"
+	"hogo/apps/hogo-manager/lib/routes"
 	. "hogo/lib/core/helpers"
 	"hogo/lib/core/http/handlers"
 	"hogo/lib/core/interfaces"
@@ -42,6 +43,7 @@ func (a *HogoManagerApp) Init(args Args) {
 	}
 
 	a.instance.NoMethod(handlers.NotFound)
+	routes.Attach(a.instance)
 }
 
 func (a *HogoManagerApp) BindToHttpServer(server *http.Server) {
