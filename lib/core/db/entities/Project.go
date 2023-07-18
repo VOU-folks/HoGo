@@ -1,6 +1,8 @@
-package types
+package entities
 
 type Project struct {
+	Entity
+
 	Id            string    `json:"id"`
 	Name          string    `json:"name"`
 	Owner         User      `json:"owner"`

@@ -2,7 +2,10 @@
   <configuration default="false" name="hogo-manager" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="HoGo" />
     <working_directory value="$PROJECT_DIR$" />
-    <parameters value=" --listen=127.0.0.1:4060 --metrics=false --silent=false --dev=true" />
+    <parameters value="--listen=127.0.0.1:4060 --metrics=false --silent=false --dev=true" />
+    <envs>
+      <env name="CORE_DB_PATH" value="$PROJECT_DIR$/.hogo/core.db" />
+    </envs>
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />

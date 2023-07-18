@@ -3,6 +3,7 @@ package lib
 import (
 	"github.com/gin-gonic/gin"
 	"hogo/apps/hogo-manager/lib/routes"
+	. "hogo/lib/core/db/common/sqlite"
 	. "hogo/lib/core/helpers"
 	"hogo/lib/core/http/handlers"
 	"hogo/lib/core/interfaces"
@@ -15,15 +16,22 @@ type HogoManagerApp struct {
 	stopped       bool
 	stopRequested bool
 
-	args     Args
-	db       interfaces.DB
-	instance *gin.Engine
+	args         Args
+	dbConnection interfaces.DBConnection
+	instance     *gin.Engine
 }
 
 func (a *HogoManagerApp) Init(args Args) {
 	a.args = args
 	a.stopped = false
 	a.stopRequested = false
+
+	a.dbConnection = SQLiteConnector{}
+	err := a.dbConnection.Open()
+	if err != nil {
+		log.Fatal("db.Open:", err.Error())
+	}
+	log.Info("DB connection established")
 
 	if a.args.SilentMode {
 		gin.SetMode(gin.ReleaseMode)
@@ -56,8 +64,8 @@ func (a *HogoManagerApp) Stop() {
 	}
 	a.stopRequested = true
 
-	if a.db != nil {
-		err := a.db.Close()
+	if a.dbConnection != nil {
+		err := a.dbConnection.Close()
 		if err != nil {
 			log.Error("db.Close:", err.Error())
 		}
